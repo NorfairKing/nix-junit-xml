@@ -31,16 +31,11 @@ def test_attribute(attribute_name):
 
     test_cases.append(test_case)
 
-attributes = [ "succeeding", "failing" ]
-
 for attribute in attributes:
     test_attribute(attribute)
 
 
-ts = TestSuite("nix-build example.nix", test_cases)
-
-# pretty printing is on by default but can be disabled using prettyprint=False
-print(TestSuite.to_xml_string([ts]))
+ts = TestSuite("nix-build " + args.file, test_cases)
 
 with open("junit.xml", "w") as f:
   f.write(TestSuite.to_xml_string([ts]))
