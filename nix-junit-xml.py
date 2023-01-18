@@ -1,6 +1,7 @@
 import argparse
-import subprocess
 import json
+import subprocess
+import time
 from junit_xml import TestSuite, TestCase
 
 parser = argparse.ArgumentParser(description="nix-junit-xml")
@@ -15,13 +16,16 @@ attributes = json.loads(attribute_process.stdout)
 test_cases = []
 
 def test_attribute(attribute_name):
+
+    begin = time.time()
     completed_process = subprocess.run(["nix","build", "-f", args.file, attribute_name], capture_output=True)
-    stdout = ''
-    stderr = ''
-    time = 1
+    end = time.time()
+
+    duration = end - begin
+
     test_case = TestCase (
         name = attribute_name,
-        elapsed_sec=time,
+        elapsed_sec=duration,
         file=args.file,
         stdout=completed_process.stdout,
         stderr=completed_process.stderr
